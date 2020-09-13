@@ -1,0 +1,81 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.zip.DataFormatException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class BankTeller {
+	private ArrayList<BankAccount> accounts = new ArrayList<>();
+	private ArrayList<String> list_transactions = new ArrayList();
+
+	public void addBankAccount(BankAccount newAccount) { // Adds newAccount to the list of accounts of this BankTeller
+		if (newAccount == null) {
+			throw new IllegalArgumentException("The account is null");
+		}
+
+		for (int i = 0; i < accounts.size(); i++) {
+			if (newAccount.equals(accounts.get(i))) { // checking whether the account ID is already in the accounts
+														// array list which stores all the ID's
+				throw new IllegalStateException(
+						"The accountID of newAccount is used by another account already added to the list of accounts");
+			}
+		}
+		accounts.add(newAccount);
+	}
+
+	public void addTransaction(java.lang.String transaction, BankAccount account)
+			throws java.util.zip.DataFormatException { // Adds a new transaction to the account's list of transactions.
+
+		String transaction_code = transaction.split("\\s+")[0];
+		int transaction_amount = Integer.parseInt(transaction.split("\\s+")[1]);
+		list_transactions.add(transaction);
+
+		if (transaction_code == "1") {
+			account.withdraw(transaction_amount);
+		}
+
+		else if (transaction_code == "0") {
+			account.deposit(transaction_amount);
+		}
+
+		else if (account == null) {
+			throw new java.lang.NullPointerException("The account is null");
+		}
+
+		else if (transaction != "0" || transaction != "1") {
+			throw new java.util.zip.DataFormatException("The format of the transaction is not correct");
+		}
+	}
+
+	public BankAccount findAccount(java.lang.String id) throws java.util.NoSuchElementException { // Returns the bank
+																									// account that has
+																									// exactly the
+																									// provided
+																									// identifier
+		for (int i = 0; i <= accounts.size(); i++) {
+			if (accounts.get(i).equals(id)) {
+				return accounts.get(i);
+			} // returning the account of the given ID
+		}
+		throw new java.util.NoSuchElementException("No account in this bankTeller's accounts list has the provided id");
+
+	}
+
+	public int getAccountsCount() { // number of accounts created
+		return accounts.size();
+	}
+
+	public void loadTransactions(java.io.File file, BankAccount account) throws java.io.FileNotFoundException {
+		Scanner scnr = new Scanner(file); // loading a set of transactions from a file object
+		while (scnr.hasNextLine()) {
+			String transactions = scnr.nextLine().trim(); // trimming the unwanted spaces before and after
+			try {
+				addTransaction(transactions, account); // calling the addTransactions method to add a new account
+														// transaction
+			} catch (DataFormatException e) {
+				continue;
+			}
+		}
+		scnr.close();
+	}
+}
