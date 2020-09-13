@@ -1,0 +1,72 @@
+import java.util.ArrayList;
+import java.util.zip.DataFormatException;
+
+public class BankAccount {
+
+	private String identifier;
+	private int balance;
+	private ArrayList<String> transactions = new ArrayList<>();
+
+	public BankAccount(java.lang.String accountID, int initialBalance) { //creting a new bank account
+		this.identifier = accountID; //initializing the identifier
+		this.balance = initialBalance;//initializing the balance
+
+		if (balance < 10) {
+			throw new java.lang.IllegalArgumentException("The balance is less than 10");
+		}
+		transactions.add("1 " + balance);
+	}
+
+	public void deposit(int depositAmount) { //depositing an amount in the bank account
+		if (depositAmount < 0) {
+			throw new IllegalArgumentException("The deposit amount is negative"); //if the amount is negative, throw an exception 
+		}
+		else {
+			this.balance += depositAmount; //updating the balance
+			String d = "1 ";
+			d = d.concat(Integer.toString(depositAmount)); //adds the deposit amount to the variable
+			transactions.add(d); //adding it to the arraylist of transactions
+		}
+	
+	}
+
+	public boolean equals(BankAccount other) { //checking whether the current bank account is equal to the one created
+		if (identifier == other.identifier) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public int getBalance() { //getting the balance
+		return balance;
+	}
+
+	public java.lang.String getID() { //getting the unique identifier of the account
+		return identifier;
+	}
+
+	public java.lang.String[] getMostRecentTransactions() { //getting the 5 most recent transactions of the array
+		String[] transactions_five = new String[5];
+		for (int i = transactions.size() - 1; i > transactions.size() - 6 && i >= 0; i--) {
+			transactions_five[transactions.size() - i - 1] = transactions.get(i);
+		}
+
+		return transactions_five;
+	}
+
+	public int getTransactionsCount() { //getting the number of transactions made on the bank account
+		return transactions.size();
+	}
+
+	public void withdraw(int withdrawAmount) throws java.util.zip.DataFormatException { //withdrawing a specific amount of money
+
+		if (withdrawAmount < 0 || withdrawAmount % 10 != 0) { //amount is not a multiple of 10 or is less than 0, throw a data format exception 
+			throw new DataFormatException("Withdrawal amount is negative and is not a multiple of 10");
+		} else if (withdrawAmount > balance) { 
+			throw new IllegalStateException("Withdrawal amount is larger than this bank account's balance");
+		}
+		balance = balance - withdrawAmount;
+		transactions.add("0 " + withdrawAmount);
+	}
+}
