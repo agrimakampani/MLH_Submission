@@ -1,0 +1,99 @@
+import java.util.zip.DataFormatException;
+
+public class BankAccountTester {
+
+	public static boolean testBankAccountConstructorValidInitialBalance() { //testing the bank account's constructor
+																			
+		try {
+			BankAccount B1 = new BankAccount("abc", 123);
+			String[] s = new String[5];
+			s = B1.getMostRecentTransactions(); // created a bankaccount object to call the most recent transactions
+												// method to check the valid initial balance
+			return true;
+
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static boolean testBankAccountConstructorNotValidInitialBalance() { // not valid initial balance
+		try {
+			BankAccount B1 = new BankAccount("ABC", 4);
+			return false;
+		}
+
+		catch (IllegalArgumentException e) {
+			return true;
+		}
+	}
+
+	public static boolean testBankAccountEquals() {
+		BankAccount B1 = new BankAccount("ABC", 123); // checking whether the values in both bank accounts match, if so
+														// the bank accounts are equal
+		BankAccount B2 = new BankAccount("XYZ", 356);
+		try {
+			B1 = B2;
+			return true;
+		} catch (Exception e) {
+			return true;
+		}
+
+	}
+
+	public static boolean testBankAccountWithdrawInvalidAmount() { // withdrawing invalid amount tester
+		try {
+			BankAccount B1 = new BankAccount("YUI", 10);
+			B1.withdraw(-40);
+			return false;
+
+		} catch (DataFormatException e) {
+			return true;
+		}
+	}
+
+	public static boolean testBankAccountWithdrawLargerOfBalanceAmount() {
+		try {
+			BankAccount B1 = new BankAccount("AGH", 20); // checking whether the amount is sufficient to deduct the
+															// wanted amount
+			B1.withdraw(50);
+			return false;
+		} catch (IllegalStateException e) {
+			return true;
+		} catch (DataFormatException e) {
+
+		}
+		return false;
+	}
+
+	public static boolean testBankAccountWithdrawValidAmount() { 
+		try {
+			BankAccount B1 = new BankAccount("PLE", 100);
+			B1.withdraw(10); //valid amount 
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static boolean testBankAccountDepositNegativeAmount() {
+		BankAccount B1 = new BankAccount("GEP", 100);
+		try {
+			B1.deposit(-50); // initializing a negative value to check whether the deposit is a negative
+								// amount
+			return false;
+		} catch (IllegalArgumentException e) {
+			return true;
+		}
+	}
+
+	public static void main(String[] args) { // calling all the above methods/testers
+		System.out.println(testBankAccountConstructorValidInitialBalance());
+		System.out.println(testBankAccountConstructorNotValidInitialBalance());
+		System.out.println(testBankAccountEquals());
+		System.out.println(testBankAccountWithdrawInvalidAmount());
+		System.out.println(testBankAccountWithdrawLargerOfBalanceAmount());
+		System.out.println(testBankAccountWithdrawValidAmount());
+		System.out.println(testBankAccountDepositNegativeAmount());
+	}
+
+}
