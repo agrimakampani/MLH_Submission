@@ -1,0 +1,52 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class BankTellerTester {
+
+	public static boolean testBankTellerConstructor() {
+		BankTeller BT1 = new BankTeller();
+		if (BT1.getAccountsCount() == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean testBankTellerAddBankAccountUsedIdentifier() {
+		BankTeller bank = new BankTeller();
+		BankAccount ac1 = new BankAccount("123", 10);
+		BankAccount ac2 = new BankAccount("123", 10);
+		bank.addBankAccount(ac1); // adds newAccount to the list of
+									// accounts of this BankTeller if so valid
+		try {
+			bank.addBankAccount(ac2);
+		} catch (IllegalStateException e) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	public static boolean testBankTellerLoadTransactionsFileNotFound() {
+		BankTeller bank = new BankTeller(); // bank object
+		BankAccount account = new BankAccount("ABC", 123); // initializing the values to the account
+
+		File file = new File("fdgdf");
+		try {
+			bank.loadTransactions(file, account); // calling the loadtransactions method
+		} catch (FileNotFoundException e) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	public static void main(String[] args) { // calling all the above methods/testers
+
+		System.out.println(testBankTellerConstructor());
+		System.out.println(testBankTellerAddBankAccountUsedIdentifier());
+		System.out.println(testBankTellerLoadTransactionsFileNotFound());
+	}
+
+}
